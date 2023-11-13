@@ -43,7 +43,7 @@ def predict_rub_salary(salary_result):
     return None
 
 
-def hh_language_average_salary(languages):
+def count_hh_language_average_salary(languages):
     url = 'https://api.hh.ru/vacancies'
     language_data = {}
     for language in languages:

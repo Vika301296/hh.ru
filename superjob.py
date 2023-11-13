@@ -18,7 +18,7 @@ def predict_rub_salary_for_superJob(vacancy):
         return None
 
 
-def sj_language_average_salary(languages, api_key):
+def count_sj_language_average_salary(languages, api_key):
     url = 'https://api.superjob.ru/2.0/vacancies/'
     language_data = {}
     for language in languages:

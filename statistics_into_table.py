@@ -1,7 +1,7 @@
 from terminaltables import AsciiTable
 
 
-def statistics_into_table(title, language_data):
+def create_statistics_table(title, language_data):
     table_data = [
         ['Язык программирования', 'Вакансий найдено',
          'Вакансий обработано', 'Средняя зарплата']
