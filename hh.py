@@ -1,33 +1,6 @@
 import requests
 
 
-def compare_languages(url, languages):
-    results = {}
-    for language in languages:
-        payload = {'text': f'{language} разработчик',
-                   'area': 1,
-                   'period': 30}
-        response = requests.get(url, params=payload)
-        response.raise_for_status()
-        found = response.json().get('found')
-        results[language] = found
-    return results
-
-
-def get_salary(url, language):
-    payload = {'text': f'{language} разработчик',
-               'area': 1,
-               'period': 1}
-    response = requests.get(url, params=payload)
-    response.raise_for_status()
-    vacancies = response.json().get('items')
-    salary_result = []
-    for vacancy in vacancies:
-        salary = vacancy['salary']
-        salary_result.append(salary)
-    return salary_result
-
-
 def predict_rub_salary(salary_result):
     if salary_result and salary_result['currency'] == 'RUR':
         from_salary = salary_result.get('from')
@@ -63,10 +36,7 @@ def count_hh_language_average_salary(languages):
             response = response.json()
             vacancies_found_amount = response.get('found')
             vacancies = response.get('items')
-            vacancy_salary = []
-            for vacancy in vacancies:
-                salary = vacancy['salary']
-                vacancy_salary.append(salary)
+            vacancy_salary = [vacancy['salary'] for vacancy in vacancies]
             total_vacancies_found += vacancies_found_amount
             different_vacancies_salary.extend(vacancy_salary)
             pages_number = response.get('pages')
