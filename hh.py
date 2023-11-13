@@ -60,15 +60,16 @@ def count_hh_language_average_salary(languages):
             }
             response = requests.get(url, params=payload)
             response.raise_for_status()
-            vacancies_found_amount = response.json().get('found')
-            vacancies = response.json().get('items')
+            response = response.json()
+            vacancies_found_amount = response.get('found')
+            vacancies = response.get('items')
             vacancy_salary = []
             for vacancy in vacancies:
                 salary = vacancy['salary']
                 vacancy_salary.append(salary)
             total_vacancies_found += vacancies_found_amount
             different_vacancies_salary.extend(vacancy_salary)
-            pages_number = response.json().get('pages')
+            pages_number = response.get('pages')
             page += 1
         average_different_vacancies = []
 
