@@ -20,6 +20,9 @@ def predict_rub_salary_for_superJob(vacancy):
 
 def count_sj_language_average_salary(languages, api_key):
     url = 'https://api.superjob.ru/2.0/vacancies/'
+    moscow_id = 4
+    development_sphere = 48
+    vacancies_per_page = 100
     language_statistics = {}
     for language in languages:
         total_vacancies_found = 0
@@ -29,10 +32,10 @@ def count_sj_language_average_salary(languages, api_key):
         while page < pages_number:
             payload = {
                 'keyword': f'{language} разработчик',
-                'catalogues': 48,
-                'town': 4,
+                'catalogues': development_sphere,
+                'town': moscow_id,
                 'page': page,
-                'count': 100
+                'count': vacancies_per_page
             }
             headers = {'X-Api-App-Id': api_key}
             response = requests.get(url, params=payload, headers=headers)

@@ -18,6 +18,8 @@ def predict_rub_salary(salary_result):
 
 def count_hh_language_average_salary(languages):
     url = 'https://api.hh.ru/vacancies'
+    moscow_id = 1
+    days_for_search = 1
     language_statistics = {}
     for language in languages:
         total_vacancies_found = 0
@@ -27,8 +29,8 @@ def count_hh_language_average_salary(languages):
         while page < pages_number:
             payload = {
                 'text': f'{language} разработчик',
-                'area': 1,
-                'period': 1,
+                'area': moscow_id,
+                'period': days_for_search,
                 'page': page
             }
             response = requests.get(url, params=payload)
