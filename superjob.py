@@ -1,21 +1,6 @@
 import requests
 
-
-def predict_rub_salary_for_superJob(vacancy):
-    if vacancy and vacancy['currency'] == 'rub':
-        from_salary = vacancy.get('payment_from')
-        to_salary = vacancy.get('payment_to')
-        if from_salary and to_salary:
-            average_salary = int((from_salary + to_salary) / 2)
-        elif from_salary:
-            average_salary = int(from_salary * 1.2)
-        elif to_salary:
-            average_salary = int(to_salary * 0.8)
-        else:
-            return None
-        return average_salary
-    else:
-        return None
+from average_salary import average_salary
 
 
 def count_sj_language_average_salary(languages, api_key):
@@ -43,9 +28,12 @@ def count_sj_language_average_salary(languages, api_key):
             vacancies_found = response.json().get('objects')
             vacancy_salary = []
             for vacancy in vacancies_found:
-                salary = predict_rub_salary_for_superJob(vacancy)
-                if salary:
-                    vacancy_salary.append(salary)
+                if vacancy and vacancy['currency'] == 'rub':
+                    from_salary = vacancy.get('payment_from')
+                    to_salary = vacancy.get('payment_to')
+                    salary = average_salary(from_salary, to_salary)
+                    if salary:
+                        vacancy_salary.append(salary)
             total_vacancies_found += len(vacancies_found)
             different_vacancies_salary.extend(vacancy_salary)
             page += 1
