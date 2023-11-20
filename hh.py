@@ -9,7 +9,6 @@ def count_hh_language_average_salary(languages):
     days_for_search = 1
     language_statistics = {}
     for language in languages:
-        different_vacancies_salary = []
         page = 0
         pages_number = 1
         while page < pages_number:
@@ -24,29 +23,28 @@ def count_hh_language_average_salary(languages):
             response = response.json()
             vacancies_found_amount = response.get('found')
             vacancies = response.get('items')
-            vacancy_salary = [vacancy['salary'] for vacancy in vacancies]
-            different_vacancies_salary.extend(vacancy_salary)
+            vacancy_salaries = [vacancy['salary'] for vacancy in vacancies]
             pages_number = response.get('pages')
             page += 1
-        average_vacancies = []
+        average_for_vacancies = []
 
-        for salary in different_vacancies_salary:
+        for salary in vacancy_salaries:
             if salary and salary['currency'] == 'RUR':
                 from_salary = salary.get('from')
                 to_salary = salary.get('to')
                 average = average_salary(from_salary, to_salary)
                 if average:
-                    average_vacancies.append(average)
-        if average_vacancies:
+                    average_for_vacancies.append(average)
+        if average_for_vacancies:
             average_language_salary = int(
-                sum(average_vacancies) / len(
-                    average_vacancies))
+                sum(average_for_vacancies) / len(
+                    average_for_vacancies))
         else:
             average_language_salary = 0
 
         language_statistics[language] = {
             'vacancies_found': vacancies_found_amount,
-            'vacancies_processed': len(different_vacancies_salary),
+            'vacancies_processed': len(vacancy_salaries),
             'average_salary': average_language_salary
         }
 

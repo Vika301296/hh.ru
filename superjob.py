@@ -11,7 +11,6 @@ def count_sj_language_average_salary(languages, api_key):
     language_statistics = {}
     for language in languages:
         total_vacancies_found = 0
-        different_vacancies_salary = []
         page = 0
         pages_number = 1
         while page < pages_number:
@@ -26,28 +25,27 @@ def count_sj_language_average_salary(languages, api_key):
             response = requests.get(url, params=payload, headers=headers)
             response.raise_for_status()
             vacancies_found = response.json().get('objects')
-            vacancy_salary = []
+            vacancy_salaries = []
             for vacancy in vacancies_found:
                 if vacancy and vacancy['currency'] == 'rub':
                     from_salary = vacancy.get('payment_from')
                     to_salary = vacancy.get('payment_to')
                     salary = average_salary(from_salary, to_salary)
                     if salary:
-                        vacancy_salary.append(salary)
-            total_vacancies_found += len(vacancies_found)
-            different_vacancies_salary.extend(vacancy_salary)
+                        vacancy_salaries.append(salary)
+            total_vacancies_found += response.json().get('total')
             page += 1
             pages_number = len(vacancies_found) / payload['count']
-        if different_vacancies_salary:
-            average_language_salary = int(
-                sum(different_vacancies_salary) / len(
-                    different_vacancies_salary))
-        else:
-            average_language_salary = 0
+            if vacancy_salaries:
+                average_language_salary = int(
+                    sum(vacancy_salaries) / len(
+                        vacancy_salaries))
+            else:
+                average_language_salary = 0
 
         language_statistics[language] = {
             'vacancies_found': total_vacancies_found,
-            'vacancies_processed': len(different_vacancies_salary),
+            'vacancies_processed': len(vacancy_salaries),
             'average_salary': average_language_salary
         }
 
