@@ -1,6 +1,6 @@
 import requests
 
-from average_salary import average_salary
+from average_salary import count_average_salary
 
 
 def count_sj_language_average_salary(languages, api_key):
@@ -24,16 +24,19 @@ def count_sj_language_average_salary(languages, api_key):
             headers = {'X-Api-App-Id': api_key}
             response = requests.get(url, params=payload, headers=headers)
             response.raise_for_status()
-            vacancies_found = response.json().get('objects')
+            response = response.json()
+            vacancies_found = response.get('objects')
             vacancy_salaries = []
             for vacancy in vacancies_found:
-                if vacancy and vacancy['currency'] == 'rub':
-                    from_salary = vacancy.get('payment_from')
-                    to_salary = vacancy.get('payment_to')
-                    salary = average_salary(from_salary, to_salary)
-                    if salary:
-                        vacancy_salaries.append(salary)
-            total_vacancies_found += response.json().get('total')
+                if not (vacancy and vacancy['currency'] == 'rub'):
+                    continue
+                from_salary = vacancy.get('payment_from')
+                to_salary = vacancy.get('payment_to')
+                salary = count_average_salary(from_salary, to_salary)
+                if not salary:
+                    continue
+                vacancy_salaries.append(salary)
+            total_vacancies_found = response.json().get('total')
             page += 1
             pages_number = len(vacancies_found) / payload['count']
             if vacancy_salaries:

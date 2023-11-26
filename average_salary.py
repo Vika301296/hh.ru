@@ -1,4 +1,4 @@
-def average_salary(from_salary=None, to_salary=None):
+def count_average_salary(from_salary=None, to_salary=None):
     if not (from_salary and to_salary):
         return None
     elif from_salary:

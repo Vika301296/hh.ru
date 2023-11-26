@@ -1,6 +1,6 @@
 import requests
 
-from average_salary import average_salary
+from average_salary import count_average_salary
 
 
 def count_hh_language_average_salary(languages):
@@ -26,19 +26,19 @@ def count_hh_language_average_salary(languages):
             vacancy_salaries = [vacancy['salary'] for vacancy in vacancies]
             pages_number = response.get('pages')
             page += 1
-        average_for_vacancies = []
+        average_salary_for_vacancies = []
 
         for salary in vacancy_salaries:
             if salary and salary['currency'] == 'RUR':
                 from_salary = salary.get('from')
                 to_salary = salary.get('to')
-                average = average_salary(from_salary, to_salary)
+                average = count_average_salary(from_salary, to_salary)
                 if average:
-                    average_for_vacancies.append(average)
-        if average_for_vacancies:
+                    average_salary_for_vacancies.append(average)
+        if average_salary_for_vacancies:
             average_language_salary = int(
-                sum(average_for_vacancies) / len(
-                    average_for_vacancies))
+                sum(average_salary_for_vacancies) / len(
+                    average_salary_for_vacancies))
         else:
             average_language_salary = 0
 
