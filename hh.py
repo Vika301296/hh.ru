@@ -26,7 +26,8 @@ def count_hh_language_average_salary(languages):
             vacancy_salaries = [vacancy['salary'] for vacancy in vacancies]
             pages_number = response.get('pages')
             page += 1
-        average_salary_for_vacancies = []
+            payload['page'] = page
+        average_salaries_for_vacancies = []
 
         for salary in vacancy_salaries:
             if salary and salary['currency'] == 'RUR':
@@ -34,11 +35,11 @@ def count_hh_language_average_salary(languages):
                 to_salary = salary.get('to')
                 average = count_average_salary(from_salary, to_salary)
                 if average:
-                    average_salary_for_vacancies.append(average)
-        if average_salary_for_vacancies:
+                    average_salaries_for_vacancies.append(average)
+        if average_salaries_for_vacancies:
             average_language_salary = int(
-                sum(average_salary_for_vacancies) / len(
-                    average_salary_for_vacancies))
+                sum(average_salaries_for_vacancies) / len(
+                    average_salaries_for_vacancies))
         else:
             average_language_salary = 0
 
