@@ -11,6 +11,7 @@ def count_hh_language_average_salary(languages):
     for language in languages:
         page = 0
         pages_number = 1
+        vacancy_salaries = []
         while page < pages_number:
             payload = {
                 'text': f'{language} разработчик',
@@ -23,10 +24,10 @@ def count_hh_language_average_salary(languages):
             response = response.json()
             vacancies_found_amount = response.get('found')
             vacancies = response.get('items')
-            vacancy_salaries = [vacancy['salary'] for vacancy in vacancies]
+            vacancy_salaries.extend(
+                [vacancy['salary'] for vacancy in vacancies])
             pages_number = response.get('pages')
             page += 1
-            payload['page'] = page
         average_salaries_for_vacancies = []
 
         for salary in vacancy_salaries:
@@ -45,7 +46,7 @@ def count_hh_language_average_salary(languages):
 
         language_statistics[language] = {
             'vacancies_found': vacancies_found_amount,
-            'vacancies_processed': len(vacancy_salaries),
+            'vacancies_processed': len(average_salaries_for_vacancies),
             'average_salary': average_language_salary
         }
 
