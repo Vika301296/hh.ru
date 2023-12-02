@@ -27,9 +27,11 @@ def count_sj_language_average_salary(languages, api_key):
             response.raise_for_status()
             response = response.json()
             vacancies_found = response.get('objects')
-            total_vacancies_found += len(vacancies_found)
             page += 1
-            pages_number = total_vacancies_found / vacancies_per_page
+        total_vacancies_found = response.get('total')
+        pages_number = total_vacancies_found // vacancies_per_page
+        if total_vacancies_found % vacancies_per_page != 0:
+            pages_number += 1
         for vacancy in vacancies_found:
             if not (vacancy and vacancy['currency'] == 'rub'):
                 continue
